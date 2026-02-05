@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Распиание</title>
+</head>
+
+<body>
+    <a href="post.html">Добавить</a>
+    <a href="get.html">Все расписание</a>
+    <table>
+        <tr>
+            <th>
+                Идентификатор
+            </th>
+            <th>
+                Остановка
+            </th>
+            <th>
+                Время
+            </th>
+            <th>
+                Автобус
+            </th>
+        </tr>
+    </table>
+
+</body>
+<script>
+    var table = document.querySelector("table");
+    GetSheduleAsync();
+
+    async function GetSheduleAsync() {
+        var response = await fetch("http://127.0.0.1:8000/shedule");
+        var shedule = await response.json();
+
+        shedule.forEach(x => {
+            var tr = document.createElement("tr");
+            tr.innerHTML =
+                `
+                <td>${x.id.substring(0, 8)}</td>
+                <td>${x.stop_complex}</td>
+                <td>${x.date_time.substring(0, 5)}</td>
+                <td>${x.bus_number}</td>
+            `;
+            table.append(tr);
+        })
+    }
+</script>
+<style>
+    td,
+    th {
+        border: 1px black solid;
+    }
+</style>
+
+</html>

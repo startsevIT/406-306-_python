@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <a href="post.html">Добавить</a>
+    <a href="get.html">Все расписание</a>
+    <form onsubmit="send_async(event)">
+        <input name="stop_complex" placeholder="Остановка"><br />
+        Время: <input name="date_time" type="time" placeholder="Время"><br />
+        <input name="bus_number" placeholder="Номер автобуса"><br />
+        <button type="submit">Создать</button>
+    </form>
+</body>
+<script>
+    async function send_async(e) {
+        e.preventDefault();
+
+        var form = e.target;
+        var stop_complex = form.elements.stop_complex.value;
+        var date_time = form.elements.date_time.value;
+        var bus_number = form.elements.bus_number.value;
+
+        var body = JSON.stringify({
+            stop_complex: stop_complex,
+            date_time: date_time,
+            bus_number: bus_number
+        })
+
+        console.log(body)
+        try {
+            var response = await fetch("http://127.0.0.1:8000/shedule", {
+                method: "post",
+                headers: { "Content-type": "application/json" },
+                body: body,
+            })
+            if (response.ok) {
+                alert("Создано")
+            }
+            else {
+                alert("Ошибка")
+            }
+        }
+        catch (e) {
+            alert("Сервер недоступен")
+        }
+    }
+</script>
+
+</html>
